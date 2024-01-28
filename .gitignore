@@ -1,0 +1,9 @@
+.idea/
+docker/java/webserver/target/
+docker/java/webserverfilesystem/target
+docker/java/interactive/target
+docker/java/webserver/docker.iml
+docker/java/webserverfilesystem/docker.iml
+docker/java/interactive/docker.iml
+
+

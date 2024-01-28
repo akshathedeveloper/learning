@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Thanks for Submitting</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+Status: <span th:text=${status.status} /><br/>
+Error: <span th:if="${status?.errorMessage}" th:text=${status.errorMessage} />
+<br/>
+<a href="/">Submit feedback</a>
+</body>
+</html>

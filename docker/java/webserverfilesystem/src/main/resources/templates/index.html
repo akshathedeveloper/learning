@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>User Feedback</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Form</h1>
+<form action="#" th:action="@{/feedback}" th:object="${feedback}" method="post">
+    <p>User: <input type="text" th:field="*{user}" /></p>
+    <p>Message: <input type="text" th:field="*{content}" /></p>
+    <p><input type="submit" value="Submit" /></p>
+</form>
+<br/>
+<br/>
+<form action="#" th:action="@{/publish}" th:object="${publish}" method="post">
+    <p><input type="submit" value="Publish All Feedbacks" /></p>
+</form>
+</body>
+</html>
