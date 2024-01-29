@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
@@ -20,22 +22,26 @@ public class FeedbackService {
     public void saveFeedback(Feedback feedback) throws IOException {
         var time = feedback.getTime();
         val fileName = String.format("%s_%s_%s_%s_%s_%s%s", TEMP_STORAGE_FILE_PREFIX, time.getYear(), time.getMonth(), time.getDayOfMonth(), time.getHour(), time.getMinute(), ".csv");
-        val currDir = System.getProperty("user.dir");
-        val filePath = Paths.get(currDir, "temp", fileName).toUri();
+        val destinationDirectory = Paths.get( "temp").toUri();
+        val filePath = Paths.get( "temp", fileName).toUri();
+
+        System.out.println("temp dir:"+ destinationDirectory);
         System.out.println("temp path:"+ filePath);
-        appendFeedback(feedback, filePath);
+        appendFeedback(feedback, destinationDirectory, filePath);
     }
 
     public void publishFeedbacks() throws IOException {
-        val currDir = System.getProperty("user.dir");
-        val sourceDirPath = Paths.get(currDir, "temp").toUri();
-        val destinationDirPath = Paths.get(currDir, "permanent").toUri();
+        val sourceDirPath = Paths.get("temp").toUri();
+        val destinationDirPath = Paths.get("permanent").toUri();
         File sourceDir = new File(sourceDirPath);
         File destinationDir = new File(destinationDirPath);
         copyDirectory(sourceDir, destinationDir);
     }
 
     private void copyDirectory(File sourceDirectory, File destinationDirectory) throws IOException {
+        if (!sourceDirectory.exists()) {
+            return;
+        }
         if (!destinationDirectory.exists()) {
             destinationDirectory.mkdir();
         }
@@ -58,8 +64,14 @@ public class FeedbackService {
         }
     }
 
-    private static void appendFeedback(Feedback feedback, URI filePath) throws IOException {
+    private static void appendFeedback(Feedback feedback, URI destinationDirectory, URI filePath) throws IOException {
+        File destinationFolder = new File(destinationDirectory);
+        if (!destinationFolder.exists()) {
+            System.out.println("Creating Destination Dir: "+ destinationDirectory);
+            destinationFolder.mkdir();
+        }
         File file = new File(filePath);
+        file.createNewFile();
         try (
                 FileWriter writer = new FileWriter(file, true)
         ) {
